@@ -1,7 +1,11 @@
 package org.example;
 
+import javax.swing.*;
+import java.beans.PropertyDescriptor;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Stream;
 
 interface Drawable{
     public void draw();
@@ -23,6 +27,18 @@ interface Sayable3{
 @FunctionalInterface
 interface Drawable2 {
     public void draw();
+}
+
+class Product{
+    int id;
+    String name;
+    float price;
+    public Product(int id, String name, float price){
+        super();
+        this.id = id;
+        this.name = name;
+        this.price = price;
+    }
 }
 public class Main {
     public static void main(String[] args) {
@@ -124,6 +140,77 @@ public class Main {
         //Creating Thread
         //람다 식을 사용하여 스레드를 실행할 수 있습니다. 다음 예제에서는 람다 식을 사용하여 run 메서드를 구현합니다.
         //You can use lambda expression to run thread. In the following example, we are implementing run method by using lambda expression.
+
+        Runnable r1 = new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("Thread1 is running");
+            }
+        };
+        Thread t1 =  new Thread(r1);
+        t1.start();
+        //Thread Example with lambda
+        Runnable r2=()->{
+            System.out.println("Thread2 is running");
+        };
+        Thread t2 =  new Thread(r2);
+        t2.start();
+
+        //comparator
+        List<Product> plist = new ArrayList<Product>();
+
+        //adding products
+        plist.add(new Product(1, "HP Laptop", 25000f));
+        plist.add(new Product(3, "keyboard", 300f));
+        plist.add(new Product(2, "Dell Mouse", 150f));
+
+        System.out.println("Sorting on the basis of name...");
+
+        //implementing lambda expression
+        Collections.sort(plist,(p1,p2) -> {
+            return p1.name.compareTo(p2.name); // compareTo 를 해야 mixing된다.
+        });
+
+
+        for(Product p:plist){
+            System.out.println(p.id + " " + p.name + " " + p.price);
+        }
+
+        //filter Collection data
+        List<Product> flist = new ArrayList<Product>();
+        flist.add(new Product(1, "Samsung A5", 17000f));
+        flist.add(new Product(3, "Iphone 6S", 65000f));
+        flist.add(new Product(2, "Sony Xperia", 25000f));
+        flist.add(new Product(4, "Nokia Lumia", 15000f));
+        flist.add(new Product(5, "Redmi4", 26000f));
+        flist.add(new Product(6, "Lenevo Vibe", 19000f));
+
+        //using lambda to filter data
+        Stream<Product> filtered_data = flist.stream().filter(p-> p.price > 20000);
+        //using lambda to iterate through collection
+        filtered_data.forEach(
+                product -> System.out.println(product.name + ": " + product.price)
+        );
+        //Event Listener
+        JTextField tf = new JTextField();
+        tf.setBounds(50, 50, 150, 20);
+        JButton b = new JButton("click");
+        b.setBounds(80,100,70,30);
+
+        //lambda expression implementing here
+        b.addActionListener(e-> {tf.setText("hello swing");});
+        JFrame f = new JFrame();
+        f.add(tf);f.add(b);
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        f.setLayout(null);
+        f.setSize(300,200);
+        f.setVisible(true);
+
+
+
+
+
+
 
 
 
